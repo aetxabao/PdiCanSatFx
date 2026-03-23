@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<?import edu.masanz.da.prog.pdi.WrappedImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.masanz.da.prog.pdi.PdiController"
+            maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="225.0" prefWidth="600.0" >
+    <center>
+        <GridPane hgap="10.0" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS" />
+            </rowConstraints>
+            <children>
+                <StackPane fx:id="originalPane">
+                    <children>
+                        <WrappedImageView fx:id="originalView" pickOnBounds="true" preserveRatio="true" />
+                    </children>
+                </StackPane>
+                <StackPane fx:id="transformedPane" GridPane.columnIndex="1">
+                    <children>
+                        <WrappedImageView fx:id="transformedView" pickOnBounds="true" preserveRatio="true" />
+                    </children>
+                </StackPane>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </BorderPane.margin>
+        </GridPane>
+    </center>
+    <bottom>
+        <VBox spacing="5.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#load" text="Load" />
+                        <Button mnemonicParsing="false" onAction="#reset" text="Reset" />
+
+                        <CheckBox mnemonicParsing="false" text="ROI" fx:id="chkRoiMargins" selected="true" >
+                        </CheckBox>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="50.0" text="Left:">
+                        </Label>
+                        <TextField fx:id="txtLeft" alignment="CENTER" prefHeight="20.0" prefWidth="50.0" text="33">
+                        </TextField>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="50.0" text="Right:">
+                        </Label>
+                        <TextField fx:id="txtRight" alignment="CENTER" prefHeight="20.0" prefWidth="50.0" text="33">
+                        </TextField>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="50.0" text="Top:">
+                        </Label>
+                        <TextField fx:id="txtTop" alignment="CENTER" prefHeight="20.0" prefWidth="50.0" text="33">
+                        </TextField>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="50.0" text="Bottom:">
+                        </Label>
+                        <TextField fx:id="txtBottom" alignment="CENTER" prefHeight="20.0" prefWidth="50.0" text="33">
+                        </TextField>
+
+                        <Button mnemonicParsing="false" onAction="#save" text="Save" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#convertToColor" text="Color" />
+                        <ColorPicker fx:id="colorPicker" >
+                        </ColorPicker>
+                        <Button mnemonicParsing="false" onAction="#convertToBlur" text="Suavizado" />
+                        <Button mnemonicParsing="false" onAction="#convertToGrayScale" text="Grises" />
+                        <Button mnemonicParsing="false" onAction="#convertToEdges" text="Bordes" />
+                        <Button mnemonicParsing="false" onAction="#convertToBW" text="B/N" />
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="Th.B/N:">
+                        </Label>
+                        <TextField fx:id="txtBWThreshold" alignment="CENTER" prefHeight="20.0" prefWidth="50.0" text="16">
+                        </TextField>
+                        <Button mnemonicParsing="false" onAction="#invertColor" text="Invertir" />
+                        <Button mnemonicParsing="false" onAction="#severalFilters" text="Varios" />
+                        <Button mnemonicParsing="false" onAction="#rotate" text="Girar" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#openCV" text="OpenCV" />
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="Min.intersec.:">
+                        </Label>
+                        <TextField fx:id="txtMinIntersections" alignment="CENTER" prefHeight="20.0" prefWidth="50.0" text="30">
+                        </TextField>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="Min.length:">
+                        </Label>
+                        <TextField fx:id="txtMinLength" alignment="CENTER" prefHeight="20.0" prefWidth="50.0" text="15">
+                        </TextField>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="Max.gap:">
+                        </Label>
+                        <TextField fx:id="txtMaxGap" alignment="CENTER" prefHeight="20.0" prefWidth="50.0" text="5">
+                        </TextField>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="Distance:">
+                        </Label>
+                        <TextField fx:id="txtDistance" alignment="CENTER" prefHeight="20.0" prefWidth="100.0" text="">
+                        </TextField>
+                    </children>
+                </HBox>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </BorderPane.margin>
+        </VBox>
+    </bottom>
+</BorderPane>
