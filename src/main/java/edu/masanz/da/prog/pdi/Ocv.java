@@ -18,7 +18,7 @@ public class Ocv {
 
 
     public static List<Segment> segments = new ArrayList<>();
-    public static List<Line> lines = new ArrayList<>();
+    public static List<LineCar> lines = new ArrayList<>();
 
 
     // https://es.wikipedia.org/wiki/Transformada_de_Hough#Detectando_l%C3%ADneas_rectas
@@ -119,7 +119,7 @@ public class Ocv {
 
         lines = new ArrayList<>();
         for (int i = 0; i < groups.size(); i++) {
-            Line line = fitLine(groups.get(i));
+            LineCar line = fitLine(groups.get(i));
             System.out.println(line);
             lines.add(line);
         }
@@ -134,7 +134,7 @@ public class Ocv {
         }
     }
 
-    private static Line fitLine(List<Segment> segs) {
+    private static LineCar fitLine(List<Segment> segs) {
         List<Point> pts = new ArrayList<>();
 
         for (Segment s : segs) {
@@ -153,7 +153,7 @@ public class Ocv {
         double x0 = matLine.get(2,0)[0];
         double y0 = matLine.get(3,0)[0];
 
-        Line l = new Line();
+        LineCar l = new LineCar();
         l.a = -vy;
         l.b = vx;
         l.c = vy * x0 - vx * y0;

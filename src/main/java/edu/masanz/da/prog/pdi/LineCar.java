@@ -1,20 +1,24 @@
 package edu.masanz.da.prog.pdi;
 
-public class Line {
+public class LineCar {
     // ax + by + c = 0
     public double a, b, c;
 
-    public Line() {
+    public LineCar() {
         this(0,0,0);
     }
 
-    public Line(double a, double b, double c) {
+    public LineCar(double a, double b, double c) {
         this.a = a;
         this.b = b;
         this.c = c;
     }
 
-    public Line(double x1, double y1, double x2, double y2) {
+    public LineCar(Point p1, Point p2) {
+        this(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+    }
+
+    public LineCar(double x1, double y1, double x2, double y2) {
         // Cómo transformar dos puntos en la forma general de la recta:
         // 1. Obtener la pendiente (m) y la ordenada al origen (h):
         //    m = (y2 - y1) / (x2 - x1)
@@ -51,7 +55,7 @@ public class Line {
         return (-a * x - c) / b;
     }
 
-    public double pendiente() {
+    public double angulo() {
         // pendiente = -a/b
         if (b == 0) {
             return 90.0; // línea vertical
@@ -73,11 +77,11 @@ public class Line {
     // a₁x + b₁y + c₁ = 0
     // a₂x + b₂y + c₂ = 0
     // Si son casi paralelas:
-    public double distanciaConLineaParalela(Line otra) {
+    public double distanciaConLineaParalela(LineCar otra) {
         return Math.abs(otra.c - this.c) / Math.sqrt(this.a*this.a + this.b*this.b);
     }
 
-    public double anguloConOtraLinea(Line otra) {
+    public double anguloConOtraLinea(LineCar otra) {
         // ángulo entre dos rectas:
         // tan(θ) = |(m1 - m2) / (1 + m1*m2)|
         // donde m1 y m2 son las pendientes de las rectas.
@@ -97,15 +101,15 @@ public class Line {
     public String toString() {
         // ax + by + c = 0
         return String.format("% .2f * x + % .2f * y + % .2f = 0    ang = % .2fº    h = %.2f",
-                                a, b, c, pendiente(), altura());
+                                a, b, c, angulo(), altura());
     }
 
     public static void main(String[] args) {
-        Line l = new Line(2, -3, 6);
+        LineCar l = new LineCar(2, -3, 6);
         System.out.println(l);
         //
-        Line l1 = new Line(1,1,1,5);
-        Line l2 = new Line(2,1,3,5);
+        LineCar l1 = new LineCar(1,1,1,5);
+        LineCar l2 = new LineCar(2,1,3,5);
 
         double ang = l1.anguloConOtraLinea(l2);
         System.out.println(l1);

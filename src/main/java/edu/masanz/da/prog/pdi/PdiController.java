@@ -3,6 +3,11 @@ package edu.masanz.da.prog.pdi;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -19,7 +24,6 @@ import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
@@ -29,6 +33,15 @@ public class PdiController {
     private Image transformedImage;
 
     private String pathToImage;
+
+    private TextField txtP = new TextField();
+
+    private Point p, p1, p2, p3, p4, p5, p6;
+
+    private boolean isDrawingPoint = false;
+
+    @FXML
+    private BorderPane borderPane;
 
     @FXML
     private StackPane originalPane;
@@ -78,9 +91,61 @@ public class PdiController {
     private TextField txtDistance;
 
     @FXML
+    private TextField txtPosition;
+
+    @FXML
+    private TextField txtP1;
+    @FXML
+    private TextField txtP2;
+    @FXML
+    private TextField txtP3;
+    @FXML
+    private TextField txtP4;
+    @FXML
+    private TextField txtP5;
+    @FXML
+    private TextField txtP6;
+
+    @FXML
+    private Button btnP1;
+    @FXML
+    private Button btnP2;
+    @FXML
+    private Button btnP3;
+    @FXML
+    private Button btnP4;
+    @FXML
+    private Button btnP5;
+    @FXML
+    private Button btnP6;
+    @FXML
+    private Button btnL1;
+    @FXML
+    private Button btnL2;
+    @FXML
+    private Button btnL3;
+
+    @FXML
+    private TextField txtL1;
+    @FXML
+    private TextField txtL2;
+    @FXML
+    private TextField txtL3;
+
+    @FXML
     public void initialize() {
 
-        File file = new File("img/gelatina2.jpg");
+        p = new Point();
+        p1 = new Point();
+        p2 = new Point();
+        p3 = new Point();
+        p4 = new Point();
+        p5 = new Point();
+        p6 = new Point();
+
+
+//        File file = new File("img/gelatina2.jpg");
+        File file = new File("img/pic303.jpg");
         if (file != null) {
             originalImage = new Image(file.toURI().toString());
             originalView.setImage(originalImage);
@@ -94,6 +159,7 @@ public class PdiController {
         txtBWThreshold.setText("16");
 
         txtDistance.setDisable(true);
+        txtPosition.setDisable(true);
 
         chkRoiMargins.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -113,6 +179,70 @@ public class PdiController {
                 }
             }
         });
+
+        transformedView.setOnMouseClicked(
+            event -> {
+                if (originalImage == null) return;
+                double clickX = event.getX();
+                double clickY = event.getY();
+                double imageWidth = transformedView.getBoundsInLocal().getWidth();
+                double imageHeight = transformedView.getBoundsInLocal().getHeight();
+                double imgX = (clickX / imageWidth) * transformedImage.getWidth();
+                double imgY = (clickY / imageHeight) * transformedImage.getHeight();
+                System.out.printf("Clicked at: (%.2f, %.2f)\n", imgX, imgY);
+                if (isDrawingPoint) {
+                    // p será el punto que se haya elegido con los botones de la interfaz
+                    p.set(imgX, imgY);
+                    txtP.setText(p.toString());
+                    txtP.requestFocus();
+                    txtP.positionCaret(0);
+                    txtP.selectAll();
+                    // Pintar
+                    int w = (int) (transformedView.getFitWidth() / 50); // 2% del ancho de la imagen
+                    int h = (int) (transformedView.getFitHeight() / 50); // 2% del alto de la imagen
+                    int a = Math.max(w, h); // mayor
+                    //System.out.printf("w=%d, h=%d, a=%d\n", w, h, a);
+                    transformedImage = Pdi.drawPoint(transformedImage,  colorPicker.getValue(), p, a);
+                    transformedView.setImage(transformedImage);
+                    // luego se desvincula el punto
+                    p = new Point();
+                    txtP = new TextField();
+                    isDrawingPoint = false;
+                }
+            }
+        );
+
+        transformedView.setOnMouseMoved(
+            event -> {
+                if (originalImage == null) return;
+                double moveX = event.getX();
+                double moveY = event.getY();
+                double imageWidth = transformedView.getBoundsInLocal().getWidth();
+                double imageHeight = transformedView.getBoundsInLocal().getHeight();
+                double imgX = (moveX / imageWidth) * transformedImage.getWidth();
+                double imgY = (moveY / imageHeight) * transformedImage.getHeight();
+                txtPosition.setText(String.format("(%.0f, %.0f)", imgX, imgY));
+            }
+        );
+
+        borderPane.setOnKeyPressed(
+            event -> {
+                System.out.println("Ctrl+Shift+X pressed");
+                if (event.isControlDown() && event.isShiftDown()) {
+                    switch (event.getCode()){
+                        case DIGIT1: btnP1.requestFocus(); btnP1.fire(); break;
+                        case DIGIT2: btnP2.requestFocus(); btnP2.fire(); break;
+                        case DIGIT3: btnP3.requestFocus(); btnP3.fire(); break;
+                        case DIGIT4: btnP4.requestFocus(); btnP4.fire(); break;
+                        case DIGIT5: btnP5.requestFocus(); btnP5.fire(); break;
+                        case DIGIT6: btnP6.requestFocus(); btnP6.fire(); break;
+                        case DIGIT7: btnL1.requestFocus(); btnL1.fire(); break;
+                        case DIGIT8: btnL2.requestFocus(); btnL2.fire(); break;
+                        case DIGIT9: btnL3.requestFocus(); btnL3.fire(); break;
+                    }
+                }
+            }
+        );
 
     }
 
@@ -253,7 +383,7 @@ public class PdiController {
         Ocv.processarImagen(pathToImageOCV, threshold, minLineLength, maxLineGap);
 
         Color color = colorPicker.getValue();
-        List<Line> lines = Ocv.lines;
+        List<LineCar> lines = Ocv.lines;
         transformedImage = Pdi.drawRoiLines(transformedImage, color, lines, 0, getRoiRect());
 
         transformedView.setImage(transformedImage);
@@ -265,26 +395,6 @@ public class PdiController {
             txtDistance.setText(String.format("%.2f", distancia));
         }
 
-//        // ------------------------------
-//        //  PRUEBAS DE DIBUJO DE LÍNEAS
-//        // ------------------------------
-//
-//        Color color = colorPicker.getValue();
-//        List<Line> lines = new ArrayList<>();
-//
-//////        // threshold=30, minLineLength=15, maxLineGap=5  <-- VALORES QUE MEJOR FUNCIONAN
-////        lines.add(new Line(-0.03, 1, -126.07));
-////        lines.add(new Line(0.05, 1, -281.12));
-//
-//        // threshold=60, minLineLength=30, maxLineGap=10
-//        lines.add(new Line(-0.01, 1, -128.29));
-//        lines.add(new Line(0.09, 1, -287.09));
-//
-//
-////        public static Image drawRoiLines(Image image, Color color, List<Line> lines, int numberOfLines, Rect rect) {
-//        transformedImage = Pdi.drawRoiLines(transformedImage, color, lines, 0, getRoiRect());
-//
-//        transformedView.setImage(transformedImage);
     }
 
     private String saveRoiToTempFile() {
@@ -345,5 +455,48 @@ public class PdiController {
             return defaultValue;
         }
     }
+
+
+    @FXML
+    public void drawPoint(ActionEvent actionEvent) {
+        String s = ((Button)(actionEvent.getSource())).getText()
+                .replace(" ", "")
+                .toUpperCase();
+        switch (s) {
+            case "P1": p = p1; txtP = txtP1; break;
+            case "P2": p = p2; txtP = txtP2; break;
+            case "P3": p = p3; txtP = txtP3; break;
+            case "P4": p = p4; txtP = txtP4; break;
+            case "P5": p = p5; txtP = txtP5; break;
+            case "P6": p = p6; txtP = txtP6; break;
+        }
+        isDrawingPoint = true;
+    }
+
+
+    @FXML
+    public void drawLine(ActionEvent actionEvent) {
+        TextField txtL = new TextField();
+        Point pA = new Point(), pB = new Point();
+        String s = ((Button)(actionEvent.getSource())).getText()
+                .replace(" ", "")
+                .toUpperCase();
+        switch (s) {
+            case "L1": pA = p1; pB = p2; txtL = txtL1; break;
+            case "L2": pA = p3; pB = p4; txtL = txtL2; break;
+            case "L3": pA = p5; pB = p6; txtL = txtL3; break;
+        }
+
+        if (s.equals("L3")) {
+            double distance = pA.distance(pB);
+            txtL.setText(String.format("%.2f px", distance));
+        }else {
+            LineScr line = new LineScr(pA, pB);
+            txtL.setText(line.anguloInvertido() + "º");
+        }
+        transformedImage = Pdi.drawLine(transformedImage, colorPicker.getValue(), pA, pB);
+        transformedView.setImage(transformedImage);
+    }
+
 
 }

@@ -46,7 +46,7 @@ public class Pdi {
     }
 
 
-    public static Image drawRoiLines(Image image, Color color, List<Line> roiLines, int numberOfLines, Rect rect) {
+    public static Image drawRoiLines(Image image, Color color, List<LineCar> roiLines, int numberOfLines, Rect rect) {
         int width = (int) image.getWidth();
         int height = (int) image.getHeight();
 
@@ -68,7 +68,7 @@ public class Pdi {
         int num = numberOfLines > roiLines.size() ? roiLines.size() : numberOfLines;
         num = num == 0 ? roiLines.size() : num;
         for (int i = 0; i < num; i++) {
-            Line roiLine = roiLines.get(i);
+            LineCar roiLine = roiLines.get(i);
             System.out.println("Line: " + roiLine);
             // Dibujar la línea ROI en la imagen
             for (int xRoi = 1; xRoi < rect.width(); xRoi++) {
@@ -312,5 +312,85 @@ public class Pdi {
         return imagenTransformada;
     }
 
+    public static Image drawPoint(Image image, Color color, Point p, int a) {
+        int width = (int) image.getWidth();
+        int height = (int) image.getHeight();
+
+        WritableImage resImage = new WritableImage(width, height);
+        PixelWriter writer = resImage.getPixelWriter();
+        PixelReader reader = image.getPixelReader();
+
+        // Clonar la imagen original
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Color c = reader.getColor(x, y);
+                writer.setColor(x, y, c);
+            }
+        }
+
+        int a1,a2;
+
+        a1 = Math.max(0, (int) p.getX() - a);
+        a2 = Math.min((int) p.getX() + a, width-1);
+        for (int i = a1; i <= a2; i++) {
+            writer.setColor(i, (int) p.getY(), color);
+        }
+
+        a1 = Math.max(0, (int) p.getY() - a);
+        a2 = Math.min((int) p.getY() + a, height-1);
+        for (int i = a1; i <= a2; i++) {
+            writer.setColor((int) p.getX(), i, color);
+        }
+
+        return resImage;
+    }
+
+
+    public static Image drawLine(Image image, Color color, Point pA, Point pB) {
+        int width = (int) image.getWidth();
+        int height = (int) image.getHeight();
+
+        WritableImage linedImage = new WritableImage(width, height);
+        PixelWriter writer = linedImage.getPixelWriter();
+        PixelReader reader = image.getPixelReader();
+
+        // Clonar la imagen original
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Color c = reader.getColor(x, y);
+                writer.setColor(x, y, c);
+            }
+        }
+
+        LineScr line = new LineScr(pA, pB);
+
+        if (pA.getX() > pB.getX()) {
+            Point temp = pA;
+            pA = pB;
+            pB = temp;
+        }
+
+        for (int x = (int) pA.getX(); x <= pB.getX(); x++) {
+            int y = (int) Math.round(line.getY(x));
+            if (y < 0) { continue; }
+            if (y >= height) { continue;}
+            writer.setColor(x, y, color);
+        }
+
+        if (pA.getY() > pB.getY()) {
+            Point temp = pA;
+            pA = pB;
+            pB = temp;
+        }
+
+        for (int y = (int) pA.getY(); y <= pB.getY(); y++) {
+            int x = (int) Math.round(line.getX(y));
+            if (x < 0) { continue; }
+            if (x >= width) { continue;}
+            writer.setColor(x, y, color);
+        }
+
+        return linedImage;
+    }
 }
 

@@ -21,7 +21,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.masanz.da.prog.pdi.PdiController"
             maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="225.0" prefWidth="600.0" >
+            prefHeight="225.0" prefWidth="600.0" fx:id="borderPane" >
     <center>
         <GridPane hgap="10.0" BorderPane.alignment="CENTER">
             <columnConstraints>
@@ -114,6 +114,36 @@
                         <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="Distance:">
                         </Label>
                         <TextField fx:id="txtDistance" alignment="CENTER" prefHeight="20.0" prefWidth="100.0" text="">
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <Button fx:id="btnP1" mnemonicParsing="true" onAction="#drawPoint" text="P1" />
+                        <TextField fx:id="txtP1" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text=""></TextField>
+                        <Button fx:id="btnP2" mnemonicParsing="true" onAction="#drawPoint" text="P2" />
+                        <TextField fx:id="txtP2" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text=""></TextField>
+                        <Button fx:id="btnP3" mnemonicParsing="true" onAction="#drawPoint" text="P3" />
+                        <TextField fx:id="txtP3" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text=""></TextField>
+                        <Button fx:id="btnP4" mnemonicParsing="true" onAction="#drawPoint" text="P4" />
+                        <TextField fx:id="txtP4" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text=""></TextField>
+                        <Button fx:id="btnP5" mnemonicParsing="true" onAction="#drawPoint" text="P5" />
+                        <TextField fx:id="txtP5" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text=""></TextField>
+                        <Button fx:id="btnP6" mnemonicParsing="true" onAction="#drawPoint" text="P6" />
+                        <TextField fx:id="txtP6" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text=""></TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <Button fx:id="btnL1" mnemonicParsing="false" onAction="#drawLine" text="L1" />
+                        <TextField fx:id="txtL1" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text=""></TextField>
+                        <Button fx:id="btnL2" mnemonicParsing="false" onAction="#drawLine" text="L2" />
+                        <TextField fx:id="txtL2" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text=""></TextField>
+                        <Button fx:id="btnL3" mnemonicParsing="false" onAction="#drawLine" text="L3" />
+                        <TextField fx:id="txtL3" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text=""></TextField>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="Position:">
+                        </Label>
+                        <TextField fx:id="txtPosition" alignment="CENTER" prefHeight="20.0" prefWidth="100.0" text="">
                         </TextField>
                     </children>
                 </HBox>
